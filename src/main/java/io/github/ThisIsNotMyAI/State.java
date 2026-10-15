@@ -5,6 +5,7 @@ import java.util.List;
 
 public record State(long mask) {
     private static final Action[][] LEGAL_ACTIONS = new Action[9][] ;
+
     static {
         for(int cell = 0 ; cell < 9 ; cell++){
             int row = cell / 3 ; int col = cell % 3 ;
@@ -38,5 +39,23 @@ public record State(long mask) {
     public Action[] getLegalActions() {
         int blankIndex = (int) getBlank() ;
         return LEGAL_ACTIONS[blankIndex];
+    }
+
+    public boolean isGoal(){
+        return mask == 0x876543210L ;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 3; c++) {
+                long v = get(r * 3 + c);
+                sb.append(v == 0 ? '_' : (char) ('0' + v));
+                if (c < 2) sb.append(' ');
+            }
+            if (r < 2) sb.append('\n');
+        }
+        return sb.toString();
     }
 }
