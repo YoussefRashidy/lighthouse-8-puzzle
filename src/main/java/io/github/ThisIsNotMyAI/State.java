@@ -1,6 +1,7 @@
 package io.github.ThisIsNotMyAI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public record State(long mask) {
@@ -19,6 +20,23 @@ public record State(long mask) {
             LEGAL_ACTIONS[cell] = actionList.toArray(Action[]::new) ;
         }
     }
+
+    public static State parse(String stateString){
+        if(stateString.length() != 9)
+            throw new IllegalArgumentException("need 9 digits: " + stateString) ;
+        //TODO add a check for the state validity
+        String reversed = new StringBuilder(stateString).reverse().toString() ;
+        return new State(Long.parseLong(reversed,16)) ;
+    }
+
+    public static State of (int...cells){
+        StringBuilder sb = new StringBuilder() ;
+        for(int cell : cells)
+            sb.append(cell) ;
+        return parse(sb.toString()) ;
+    }
+
+
     public long get(int i){
         return (mask>>>4*i)& 0xFL ;
     }
