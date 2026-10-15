@@ -1,0 +1,42 @@
+package io.github.ThisIsNotMyAI;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public record State(long mask) {
+    private static final Action[][] LEGAL_ACTIONS = new Action[9][] ;
+    static {
+        for(int cell = 0 ; cell < 9 ; cell++){
+            int row = cell / 3 ; int col = cell % 3 ;
+            List<Action> actionList = new ArrayList<>() ;
+            for(Action action : Action.values()){
+                int nRow = row + action.rowDirection ;
+                int nCol = col + action.colDirection ;
+                if(nRow >= 0 && nRow < 3 && nCol >= 0 && nCol < 3)
+                    actionList.add(action) ;
+            }
+            LEGAL_ACTIONS[cell] = actionList.toArray(Action[]::new) ;
+        }
+    }
+    public long get(int i){
+        return (mask>>>4*i)& 0xFL ;
+    }
+
+    public long getBlank(){
+        for(int i = 0 ; i < 9 ; i++)
+            if(get(i) == 0) return  i ;
+        throw new IllegalStateException("no blank cell found in state %s".formatted(this));
+    }
+
+    public State swap(int i ,int j){
+        long cellI = get(i);
+        long cellJ = get(j);
+        long clearedMask = mask & ~((0XFL << 4*i)|(0XFL << 4*j)) ;
+        return new State(clearedMask | (cellI << 4*j) | (cellJ << 4*i)) ;
+    }
+
+    public Action[] getLegalActions() {
+        int blankIndex = (int) getBlank() ;
+        return LEGAL_ACTIONS[blankIndex];
+    }
+}
