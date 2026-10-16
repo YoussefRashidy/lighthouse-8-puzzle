@@ -38,7 +38,7 @@ public record State(long mask) {
 
 
     public long get(int i){
-        return (mask>>>4*i)& 0xFL ;
+        return (mask>>>(4*i))& 0xFL ;
     }
 
     public long getBlank(){
