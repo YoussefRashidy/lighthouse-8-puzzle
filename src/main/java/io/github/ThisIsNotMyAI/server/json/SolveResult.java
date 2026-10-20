@@ -12,6 +12,5 @@ public record SolveResult(
         int generated,
         int goalDepth,
         int maxDepth,
-        int peakFrontier,
         double ms
 ) {}

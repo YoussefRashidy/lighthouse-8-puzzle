@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Solver {
 
-    private record Pass(Node goal, boolean cutoff, int expanded, int maxDepth) {}
+    private record Pass(Node goal, boolean cutoff, int expanded, int generated, int maxDepth) {}
 
 
     public static SearchResult bfs(State start) {
@@ -21,18 +21,19 @@ public class Solver {
 
     public static SearchResult iddfs(State start) {
         long t0 = System.nanoTime();
-        int totalExp = 0, maxDepth = 0;
+        int totalExp = 0, totalGen = 0, maxDepth = 0;
 
         for (int limit = 0; ; limit++) {
             Pass p = depthLimited(start, limit);
             totalExp += p.expanded();
+            totalGen += p.generated();
             maxDepth = Math.max(maxDepth, p.maxDepth());
 
             if (p.goal() != null) {
-                return success("IDDFS", p.goal(), totalExp, maxDepth, t0);
+                return success("IDDFS", p.goal(), totalExp, totalGen, maxDepth, System.nanoTime() - t0);
             }
             if (!p.cutoff()) {
-                return new SearchResult("IDDFS", null, 0, 0, totalExp,
+                return new SearchResult("IDDFS", null, 0, maxDepth, totalExp, totalGen,
                         System.nanoTime() - t0);
             }
         }
@@ -43,7 +44,7 @@ public class Solver {
     private static SearchResult search(String name, State start, Queue<Node> frontier, Heuristic h) {
         long t0 = System.nanoTime();
         Set<State> explored = new HashSet<>();
-        int expanded = 0, maxDepth = 0;
+        int expanded = 0, generated = 1, maxDepth = 0;
 
         frontier.add(new Node(start, null, null, 0, h == null ? 0 : h.estimate(start)));
 
@@ -51,15 +52,16 @@ public class Solver {
             Node current = frontier.poll();
 
             if (current.s().isGoal()) {
-                return success(name, current, expanded, maxDepth, t0);
+                return success(name, current, expanded, generated, maxDepth, System.nanoTime() - t0);
             }
 
             if (explored.add(current.s())) {
                 expanded++;
-                maxDepth = Math.max(maxDepth, current.g());
                 for (Action action : current.s().getLegalActions()) {
                     State next = action.apply(current.s());
                     if (!explored.contains(next)) {
+                        generated++;
+                        maxDepth = Math.max(maxDepth, current.g() + 1);
                         frontier.add(new Node(next, current, action,
                                 current.g() + 1,
                                 h == null ? 0 : h.estimate(next)));
@@ -68,8 +70,8 @@ public class Solver {
             }
         }
 
-        return new SearchResult(name, null, 0, maxDepth, expanded,
-                (System.nanoTime() - t0));
+        return new SearchResult(name, null, 0, maxDepth, expanded, generated,
+                System.nanoTime() - t0);
     }
 
 
@@ -77,7 +79,7 @@ public class Solver {
         Deque<Node> stack = new ArrayDeque<>();
         Map<State, Integer> bestDepth = new HashMap<>();
         boolean cutoff = false;
-        int expanded = 0, maxDepth = 0;
+        int expanded = 0, generated = 1, maxDepth = 0;
 
         stack.push(new Node(start, null, null, 0, 0));
 
@@ -85,7 +87,7 @@ public class Solver {
             Node current = stack.pop();
 
             if (current.s().isGoal()) {
-                return new Pass(current, cutoff, expanded, maxDepth);
+                return new Pass(current, cutoff, expanded, generated, maxDepth);
             }
 
             Integer seen = bestDepth.get(current.s());
@@ -100,17 +102,19 @@ public class Solver {
             expanded++;
             for (Action action : current.s().getLegalActions()) {
                 State next = action.apply(current.s());
+                maxDepth = Math.max(maxDepth, current.g() + 1);
+                generated++;
                 stack.push(new Node(next, current, action, current.g() + 1, 0));
             }
         }
-        return new Pass(null, cutoff, expanded, maxDepth);
+        return new Pass(null, cutoff, expanded, generated, maxDepth);
     }
 
 
-    private static SearchResult success(String name, Node goal, int expanded, int maxDepth, long t0) {
+    private static SearchResult success(String name, Node goal, int expanded, int generated, int maxDepth, long t) {
         var path = reconstructPath(goal);
         return new SearchResult(name, path, goal.g(), maxDepth,
-                expanded, System.nanoTime() - t0);
+                expanded, generated, t);
     }
 
     private static String reconstructPath(Node goalNode) {
