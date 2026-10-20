@@ -1,6 +1,6 @@
 package io.github.ThisIsNotMyAI.server.json;
 
 import java.util.List;
+import java.util.Map;
 
-public record SolveResponse(List<SolveRequest> results) {
-}
+public record SolveResponse(Map<Algorithm, SolveResult> results) {}

@@ -4,7 +4,7 @@ import java.util.List;
 
 public record SearchResult(
         String algorithm,
-        List<Action> path,
+        String path,
         int cost,
         int maxDepth,
         int nodesExpanded,
