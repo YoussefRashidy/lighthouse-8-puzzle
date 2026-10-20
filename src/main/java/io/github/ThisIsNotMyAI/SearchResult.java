@@ -1,6 +1,10 @@
 package io.github.ThisIsNotMyAI;
 
+import io.github.ThisIsNotMyAI.server.json.Algorithm;
+import io.github.ThisIsNotMyAI.server.json.SolveResult;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record SearchResult(
         String algorithm,
@@ -8,7 +12,27 @@ public record SearchResult(
         int cost,
         int maxDepth,
         int nodesExpanded,
+        int nodesGenerated,
         long elapsedNanos
 ) {
     public boolean solved() { return path != null; }
+
+    private static SolveResult toSolveResult(SearchResult result) {
+        String moves = result.solved()
+                ? result.path().stream()
+                .map(Action::name)
+                .collect(Collectors.joining(","))
+                : null;
+        return new SolveResult(
+                Algorithm.valueOf(result.algorithm()), // TODO: Fix this
+                moves,
+                result.solved(),
+                result.cost(),
+                result.nodesExpanded(),
+                result.nodesGenerated(),
+                result.cost(),
+                result.maxDepth(),
+                result.elapsedNanos() / 1_000_000.0
+        );
+    }
 }
