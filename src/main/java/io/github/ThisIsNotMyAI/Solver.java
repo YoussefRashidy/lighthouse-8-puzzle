@@ -112,18 +112,18 @@ public class Solver {
 
 
     private static SearchResult success(String name, Node goal, int expanded, int generated, int maxDepth, long t) {
-        List<Action> path = reconstructPath(goal);
+        var path = reconstructPath(goal);
         return new SearchResult(name, path, goal.g(), maxDepth,
                 expanded, generated, t);
     }
 
-    private static List<Action> reconstructPath(Node goalNode) {
-        List<Action> path = new ArrayList<>();
+    private static String reconstructPath(Node goalNode) {
+        StringBuilder sb = new StringBuilder() ;
         for (Node n = goalNode; n.parent() != null; n = n.parent()) {
-            path.add(n.a());
+            sb.append(n.a().encoding) ;
         }
-        Collections.reverse(path);
-        return path;
+        sb.reverse() ;
+        return sb.toString();
     }
 
 

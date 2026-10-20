@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Pharos 8-Puzzle — Pixel Harbor Search Lab</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&family=VT323&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="pixel-ambience" aria-hidden="true">
+  <div class="pixel-clouds pixel-clouds-far"></div>
+  <div class="pixel-clouds pixel-clouds-near"></div>
+  <div class="pixel-sea">
+    <div class="sea-row foam" style="--y:0px;--h:8px;--c:#d6f1f8;--w:24px;--p:88px;--t:9s;--s:11"></div>
+    <div class="sea-row" style="--y:8px;--h:4px;--c:#8fd0e6;--w:40px;--p:120px;--t:12s;--s:15;--dir:reverse"></div>
+    <div class="sea-row" style="--y:26%;--h:4px;--c:#6fb4d2;--w:32px;--p:96px;--t:10s;--s:12"></div>
+    <div class="sea-row" style="--y:42%;--h:4px;--c:#5aa0c4;--w:56px;--p:168px;--t:16s;--s:21;--dir:reverse"></div>
+    <div class="sea-row" style="--y:58%;--h:4px;--c:#4a8cb4;--w:40px;--p:136px;--t:13s;--s:17"></div>
+    <div class="sea-row" style="--y:74%;--h:4px;--c:#3d78a2;--w:64px;--p:192px;--t:20s;--s:24;--dir:reverse"></div>
+    <div class="sea-row" style="--y:88%;--h:4px;--c:#356a94;--w:48px;--p:144px;--t:17s;--s:18"></div>
+    <span class="sea-spark" style="left:9%;top:22%;animation-delay:0s"></span>
+    <span class="sea-spark" style="left:23%;top:48%;animation-delay:.9s"></span>
+    <span class="sea-spark" style="left:38%;top:30%;animation-delay:1.7s"></span>
+    <span class="sea-spark" style="left:52%;top:64%;animation-delay:.4s"></span>
+    <span class="sea-spark" style="left:66%;top:36%;animation-delay:2.3s"></span>
+    <span class="sea-spark" style="left:79%;top:56%;animation-delay:1.2s"></span>
+    <span class="sea-spark" style="left:91%;top:26%;animation-delay:2.9s"></span>
+  </div>
+</div>
+<div class="wrap">
+  <header class="top">
+    <h1>Pharos 8-Puzzle</h1>
+    <p class="lede">Explore a tiny pixel-art Alexandria. Replay search algorithms as they guide the lighthouse tiles home; the blank starts in the top-left of the goal board.</p>
+  </header>
+
+  <main class="layout">
+    <section class="stage" aria-label="Board and playback">
+      <div class="board-frame"><canvas id="board" width="448" height="448" role="img" aria-label="8-puzzle board"></canvas></div>
+      <p id="caption" class="caption" aria-live="polite"></p>
+      <div class="transport" role="group" aria-label="Playback">
+        <button class="btn" id="b-start" type="button">Start</button>
+        <button class="btn" id="b-prev" type="button">Prev</button>
+        <button class="btn primary" id="b-play" type="button">Play</button>
+        <button class="btn" id="b-next" type="button">Next</button>
+        <button class="btn" id="b-end" type="button">End</button>
+      </div>
+      <div class="field-row"><label for="scrub">Step</label><input type="range" id="scrub" min="0" max="0" value="0"><span></span></div>
+      <div class="field-row"><label for="speed">Speed</label><input type="range" id="speed" min="0" max="9" value="3"><output id="speed-out" for="speed"></output></div>
+      <label class="check"><input type="checkbox" id="nums" checked> Show tile numbers</label>
+    </section>
+
+    <div class="side">
+      <form id="setup" class="panel" autocomplete="off">
+        <h2>Start state</h2>
+        <div class="field">
+          <label for="initial">Tiles row by row, 0 is the blank</label>
+          <input id="initial" type="text" inputmode="numeric" spellcheck="false" value="1,2,5,3,4,0,6,7,8">
+        </div>
+        <p id="state-msg" class="msg" aria-live="polite"></p>
+        <div class="field">
+          <label for="algo">Algorithm</label>
+          <select id="algo">
+            <option value="bfs">BFS</option>
+            <option value="dfs">DFS</option>
+            <option value="iddfs">Iterative DFS</option>
+            <option value="astar-m" selected>A* with Manhattan distance</option>
+            <option value="astar-e">A* with Euclidean distance</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button class="btn primary" type="submit" id="b-solve">Solve</button>
+          <button class="btn" type="button" id="b-shuffle">Shuffle</button>
+          <button class="btn" type="button" id="b-example">Example</button>
+        </div>
+        <p id="status" class="msg" aria-live="polite"></p>
+      </form>
+
+      <section class="panel" aria-label="Result">
+        <h2>Result</h2>
+        <div class="table-wrap"><table id="stats"><tbody></tbody></table></div>
+        <p class="note">Expanded counts nodes whose successors were generated. The goal is tested when a node leaves the frontier, so the goal node itself is not counted. Running time covers the search only, not drawing.</p>
+      </section>
+
+      <section class="panel" aria-label="Trace">
+        <h2>Trace</h2>
+        <pre class="console" id="console"></pre>
+        <div class="trace-list" id="trace-list"></div>
+      </section>
+
+      <section class="panel" aria-label="Comparison">
+        <h2>Compare all five</h2>
+        <p class="note" id="cmp-note">Runs every algorithm on the start state above. Green marks the lowest value in a column.</p>
+        <div class="btn-row"><button class="btn" type="button" id="b-runall">Run all</button></div>
+        <div class="table-wrap">
+          <table id="cmp">
+            <thead><tr><th>Algorithm</th><th class="num">Cost</th><th class="num">Expanded</th><th class="num">Generated</th><th class="num">Deepest</th><th class="num">Time</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <details class="panel">
+        <summary>Trace JSON</summary>
+        <div class="inner">
+          <p class="note">Your Java solver only needs to print the start state and the moves. This page rebuilds every board from them. <code>moves</code> is a string of U, D, L, R: the direction the blank moves.</p>
+          <pre class="sample">{"algorithm":"A* Manhattan","initial":"125340678","moves":"UL","expanded":3,"generated":7,"maxDepth":3,"ms":0.4}</pre>
+          <textarea id="json" rows="6" spellcheck="false" aria-label="Trace JSON"></textarea>
+          <div class="btn-row">
+            <button class="btn small" type="button" id="j-fill">Reset to current</button>
+            <button class="btn small" type="button" id="j-copy">Copy</button>
+            <button class="btn small" type="button" id="j-load">Load</button>
+          </div>
+          <p id="j-msg" class="msg" aria-live="polite"></p>
+        </div>
+      </details>
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+
+</body></html>

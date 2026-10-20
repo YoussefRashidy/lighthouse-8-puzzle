@@ -1,17 +1,19 @@
 package io.github.ThisIsNotMyAI;
 
 public enum Action {
-    UP(-1,0) ,
-    DOWN(1,0),
-    LEFT(0,-1),
-    RIGHT(0,1) ;
+    UP(-1,0,'U') ,
+    DOWN(1,0,'D'),
+    LEFT(0,-1,'L'),
+    RIGHT(0,1,'R') ;
 
     final int rowDirection ;
     final int colDirection ;
+    final char encoding ;
 
-    Action(int rowDirection, int colDirection) {
+    Action(int rowDirection, int colDirection , char encoding) {
         this.rowDirection = rowDirection;
         this.colDirection = colDirection;
+        this.encoding = encoding ;
     }
 
     public State apply(State state){
