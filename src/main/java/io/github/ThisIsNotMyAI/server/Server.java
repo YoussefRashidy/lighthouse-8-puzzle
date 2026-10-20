@@ -29,6 +29,8 @@ public class Server {
         //TODO call the solver to solve and return the results
         try(exchange){
             exchange.getResponseHeaders().set(ALLOW_ORIGIN.value(), ANY_ORIGIN);
+            exchange.getResponseHeaders().set(ALLOW_HEADERS.value(), ALLOWED_HEADERS);
+            exchange.getResponseHeaders().set(ALLOW_METHODS.value(),ALLOWED_METHODS );
             String httpMethod = exchange.getRequestMethod() ;
             if (httpMethod.equals("OPTIONS")) {
                 exchange.sendResponseHeaders(HTTP_NO_CONTENT, -1);
