@@ -24,7 +24,12 @@ public record State(long mask) {
     public static State parse(String stateString){
         if(stateString.length() != 9)
             throw new IllegalArgumentException("need 9 digits: " + stateString) ;
-        //TODO add a check for the state validity
+        char[] chars = stateString.toCharArray() ;
+        Arrays.sort(chars);
+        String sorted =  new String(chars) ;
+        if (!sorted.equals("012345678"))
+            throw new IllegalArgumentException("Invalid state permutation (must contain digits 0-8 once): " + stateString) ;
+
         String reversed = new StringBuilder(stateString).reverse().toString() ;
         return new State(Long.parseLong(reversed,16)) ;
     }
@@ -58,6 +63,7 @@ public record State(long mask) {
         int blankIndex = (int) getBlank() ;
         return LEGAL_ACTIONS[blankIndex];
     }
+
 
     public boolean isGoal(){
         return mask == 0x876543210L ;

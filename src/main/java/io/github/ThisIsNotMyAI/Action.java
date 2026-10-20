@@ -14,7 +14,7 @@ public enum Action {
         this.colDirection = colDirection;
     }
 
-    State apply(State state){
+    public State apply(State state){
         int blank = (int) state.getBlank() ;
         int nRow = blank / 3 + this.rowDirection ;
         int nCol = blank % 3 + this.colDirection ;
