@@ -19,9 +19,7 @@ public record SearchResult(
 
     private static SolveResult toSolveResult(SearchResult result) {
         String moves = result.solved()
-                ? result.path().stream()
-                .map(Action::name)
-                .collect(Collectors.joining(","))
+                ? result.path()
                 : null;
         return new SolveResult(
                 Algorithm.valueOf(result.algorithm()), // TODO: Fix this

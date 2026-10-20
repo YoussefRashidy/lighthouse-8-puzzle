@@ -100,10 +100,9 @@ public class Server {
                 searchResult.solved(),
                 searchResult.cost(),
                 searchResult.nodesExpanded(),
-                -1,
+                searchResult.nodesGenerated(),
                 -1,
                 searchResult.maxDepth(),
-                -1,
                 searchResult.elapsedNanos()/1000000);
     }
 
