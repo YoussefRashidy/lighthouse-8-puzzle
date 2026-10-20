@@ -1,0 +1,76 @@
+### 1. Happy path: solvable board, two algorithms
+### Expect 200. For now the server echoes the request back.
+POST http://localhost:8080/solve
+Content-Type: application/json
+
+{
+  "initialConfiguration": "125340678",
+  "algorithms": ["BFS", "ASTAR_MANHATTAN"]
+}
+
+### 2. All five algorithms
+POST http://localhost:8080/solve
+Content-Type: application/json
+
+{
+  "initialConfiguration": "125340678",
+  "algorithms": ["BFS", "DFS", "IDDFS", "ASTAR_MANHATTAN", "ASTAR_EUCLIDEAN"]
+}
+
+### 3. CORS preflight
+### Expect 204 with Access-Control-Allow-Origin and no body.
+OPTIONS http://localhost:8080/solve
+
+### 4. Wrong method
+### Expect 405 with {"Error": "..."}
+GET http://localhost:8080/solve
+
+### 5. Unknown enum value
+### Expect 400 (Jackson InvalidFormatException)
+POST http://localhost:8080/solve
+Content-Type: application/json
+
+{
+  "initialConfiguration": "125340678",
+  "algorithms": ["BOGUS"]
+}
+
+### 6. Malformed JSON (missing closing brace)
+### Expect 400
+POST http://localhost:8080/solve
+Content-Type: application/json
+
+{
+  "initialConfiguration": "125340678",
+  "algorithms": ["BFS"]
+
+### 7. Unknown field
+### Expect 400 (FAIL_ON_UNKNOWN_PROPERTIES is on by default)
+POST http://localhost:8080/solve
+Content-Type: application/json
+
+{
+  "initialConfiguration": "125340678",
+  "algorithms": ["BFS"],
+  "heuristic": "manhattan"
+}
+
+### 8. Unsolvable board (odd inversions)
+### Expect 400 once the compact constructor validates solvability
+POST http://localhost:8080/solve
+Content-Type: application/json
+
+{
+  "initial": "123456870",
+  "algorithms": ["BFS"]
+}
+
+### 9. Invalid board (duplicate digit, wrong length)
+### Expect 400 once the compact constructor validates
+POST http://localhost:8080/solve
+Content-Type: application/json
+
+{
+  "initial": "11234567",
+  "algorithms": ["BFS"]
+}
