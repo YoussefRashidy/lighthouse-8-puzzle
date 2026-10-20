@@ -10,6 +10,7 @@ import io.github.ThisIsNotMyAI.Solver;
 import io.github.ThisIsNotMyAI.State;
 import io.github.ThisIsNotMyAI.server.json.Algorithm;
 import io.github.ThisIsNotMyAI.server.json.SolveRequest;
+import io.github.ThisIsNotMyAI.server.json.SolveResponse;
 import io.github.ThisIsNotMyAI.server.json.SolveResult;
 
 import static io.github.ThisIsNotMyAI.server.HeaderName.*;
@@ -64,7 +65,7 @@ public class Server {
                 for (var algorithm : solveRequest.algorithms()) {
                     solveResultMap.put(algorithm, solve(algorithm, initialState));
                 }
-                byte[] bytes = mapper.writeValueAsBytes(solveResultMap);
+                byte[] bytes = mapper.writeValueAsBytes(new SolveResponse(solveResultMap));
                 exchange.getResponseHeaders().set(CONTENT_TYPE.value(), JSON);
                 exchange.sendResponseHeaders(HTTP_OK, bytes.length);
                 try (OutputStream os = exchange.getResponseBody()) {
@@ -103,7 +104,7 @@ public class Server {
                 -1,
                 searchResult.maxDepth(),
                 -1,
-                searchResult.elapsedNanos());
+                searchResult.elapsedNanos()/1000000);
     }
 
     public void start() {

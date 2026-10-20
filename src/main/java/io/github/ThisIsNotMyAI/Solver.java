@@ -69,7 +69,7 @@ public class Solver {
         }
 
         return new SearchResult(name, null, 0, maxDepth, expanded,
-                System.nanoTime() - t0);
+                (System.nanoTime() - t0));
     }
 
 
