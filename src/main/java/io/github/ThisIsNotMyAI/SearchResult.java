@@ -1,4 +1,4 @@
-import io.github.ThisIsNotMyAI.Action;
+package io.github.ThisIsNotMyAI;
 
 import java.util.List;
 

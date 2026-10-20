@@ -1,15 +1,11 @@
-
-import io.github.ThisIsNotMyAI.Action;
-import io.github.ThisIsNotMyAI.Heuristic;
-import io.github.ThisIsNotMyAI.Node;
-import io.github.ThisIsNotMyAI.State;
+package io.github.ThisIsNotMyAI;
 
 import java.util.*;
 
 public class Solver {
 
     private record Pass(Node goal, boolean cutoff, int expanded, int maxDepth) {}
-    
+
 
     public static SearchResult bfs(State start) {
         return search("BFS", start, new ArrayDeque<>(), null);
