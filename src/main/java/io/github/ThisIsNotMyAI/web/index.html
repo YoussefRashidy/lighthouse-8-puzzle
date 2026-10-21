@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Pharos 8-Puzzle — Pixel Harbor Search Lab</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&family=VT323&display=swap">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Lighthouse 8-Puzzle — Alexandria Harbor</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&family=VT323&display=swap">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="pixel-ambience" aria-hidden="true">
@@ -27,10 +28,17 @@
     <span class="sea-spark" style="left:91%;top:26%;animation-delay:2.9s"></span>
   </div>
 </div>
+<canvas id="beacon-bg" aria-hidden="true"></canvas>
+<canvas id="beacon-light" aria-hidden="true"></canvas>
+<canvas id="beacon-fly" aria-hidden="true"></canvas>
+<div id="dock" role="toolbar" aria-label="Sound and view">
+  <button class="dock-btn" id="b-sound" type="button" aria-pressed="true" title="Mute sound (M)"><canvas aria-hidden="true"></canvas></button>
+  <button class="dock-btn" id="b-focus" type="button" aria-pressed="false" title="Hide the interface and just watch (H)"><canvas aria-hidden="true"></canvas></button>
+</div>
 <div class="wrap">
   <header class="top">
-    <h1>Pharos 8-Puzzle</h1>
-    <p class="lede">Explore a tiny pixel-art Alexandria. Replay search algorithms as they guide the lighthouse tiles home; the blank starts in the top-left of the goal board.</p>
+    <h1>Lighthouse 8-Puzzle</h1>
+    <p class="lede">The great lighthouse of Alexandria has crumbled into nine tiles. Pick a search algorithm and watch it slide the pieces back into place. When the tower stands whole, its lamp lights up the night. The empty slot rests in the top-left corner of the finished board.</p>
   </header>
 
   <main class="layout">
@@ -102,7 +110,7 @@
       <details class="panel">
         <summary>Trace JSON</summary>
         <div class="inner">
-          <p class="note">Your Java solver only needs to print the start state and the moves. This page rebuilds every board from them. <code>moves</code> is a string of U, D, L, R: the direction the blank moves.</p>
+          <p class="note">Paste a start state and a list of moves to replay any solution. Every board is rebuilt from them. <code>moves</code> is a string of U, D, L, R: the direction the blank moves.</p>
           <pre class="sample">{"algorithm":"A* Manhattan","initial":"125340678","moves":"UL","expanded":3,"generated":7,"maxDepth":3,"ms":0.4}</pre>
           <textarea id="json" rows="6" spellcheck="false" aria-label="Trace JSON"></textarea>
           <div class="btn-row">
