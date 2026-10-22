@@ -36,7 +36,7 @@ public class Server {
         this.server.createContext("/solve", this::handleSolve);
     }
 
-    private final void handleSolve(HttpExchange exchange) throws IOException {
+    private void handleSolve(HttpExchange exchange) throws IOException {
         try (exchange) {
             exchange.getResponseHeaders().set(ALLOW_ORIGIN.value(), ANY_ORIGIN);
             exchange.getResponseHeaders().set(ALLOW_HEADERS.value(), ALLOWED_HEADERS);
@@ -101,7 +101,7 @@ public class Server {
                 searchResult.cost(),
                 searchResult.nodesExpanded(),
                 searchResult.nodesGenerated(),
-                -1,
+                searchResult.cost(),
                 searchResult.maxDepth(),
                 searchResult.elapsedNanos()/1000000);
     }
