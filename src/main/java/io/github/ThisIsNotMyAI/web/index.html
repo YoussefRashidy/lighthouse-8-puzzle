@@ -1,130 +1,303 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Lighthouse 8-Puzzle — Alexandria Harbor</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&family=VT323&display=swap">
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Lighthouse 8-Puzzle — Alexandria Harbor</title>
   <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<div class="pixel-ambience" aria-hidden="true">
-  <div class="pixel-clouds pixel-clouds-far"></div>
-  <div class="pixel-clouds pixel-clouds-near"></div>
-  <div class="pixel-sea">
-    <div class="sea-row foam" style="--y:0px;--h:8px;--c:#d6f1f8;--w:24px;--p:88px;--t:9s;--s:11"></div>
-    <div class="sea-row" style="--y:8px;--h:4px;--c:#8fd0e6;--w:40px;--p:120px;--t:12s;--s:15;--dir:reverse"></div>
-    <div class="sea-row" style="--y:26%;--h:4px;--c:#6fb4d2;--w:32px;--p:96px;--t:10s;--s:12"></div>
-    <div class="sea-row" style="--y:42%;--h:4px;--c:#5aa0c4;--w:56px;--p:168px;--t:16s;--s:21;--dir:reverse"></div>
-    <div class="sea-row" style="--y:58%;--h:4px;--c:#4a8cb4;--w:40px;--p:136px;--t:13s;--s:17"></div>
-    <div class="sea-row" style="--y:74%;--h:4px;--c:#3d78a2;--w:64px;--p:192px;--t:20s;--s:24;--dir:reverse"></div>
-    <div class="sea-row" style="--y:88%;--h:4px;--c:#356a94;--w:48px;--p:144px;--t:17s;--s:18"></div>
-    <span class="sea-spark" style="left:9%;top:22%;animation-delay:0s"></span>
-    <span class="sea-spark" style="left:23%;top:48%;animation-delay:.9s"></span>
-    <span class="sea-spark" style="left:38%;top:30%;animation-delay:1.7s"></span>
-    <span class="sea-spark" style="left:52%;top:64%;animation-delay:.4s"></span>
-    <span class="sea-spark" style="left:66%;top:36%;animation-delay:2.3s"></span>
-    <span class="sea-spark" style="left:79%;top:56%;animation-delay:1.2s"></span>
-    <span class="sea-spark" style="left:91%;top:26%;animation-delay:2.9s"></span>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&family=VT323&display=swap">
+  <div class="pixel-ambience" aria-hidden="true">
+    <div class="pixel-clouds pixel-clouds-far"></div>
+    <div class="pixel-clouds pixel-clouds-near"></div>
+    <div class="pixel-sea">
+      <div class="sea-row foam" style="--y:0px;--h:8px;--c:#d6f1f8;--w:24px;--p:88px;--t:9s;--s:11"></div>
+      <div class="sea-row" style="--y:8px;--h:4px;--c:#8fd0e6;--w:40px;--p:120px;--t:12s;--s:15;--dir:reverse"></div>
+      <div class="sea-row" style="--y:26%;--h:4px;--c:#6fb4d2;--w:32px;--p:96px;--t:10s;--s:12"></div>
+      <div class="sea-row" style="--y:42%;--h:4px;--c:#5aa0c4;--w:56px;--p:168px;--t:16s;--s:21;--dir:reverse"></div>
+      <div class="sea-row" style="--y:58%;--h:4px;--c:#4a8cb4;--w:40px;--p:136px;--t:13s;--s:17"></div>
+      <div class="sea-row" style="--y:74%;--h:4px;--c:#3d78a2;--w:64px;--p:192px;--t:20s;--s:24;--dir:reverse"></div>
+      <div class="sea-row" style="--y:88%;--h:4px;--c:#356a94;--w:48px;--p:144px;--t:17s;--s:18"></div>
+      <span class="sea-spark" style="left:9%;top:22%;animation-delay:0s"></span>
+      <span class="sea-spark" style="left:23%;top:48%;animation-delay:.9s"></span>
+      <span class="sea-spark" style="left:38%;top:30%;animation-delay:1.7s"></span>
+      <span class="sea-spark" style="left:52%;top:64%;animation-delay:.4s"></span>
+      <span class="sea-spark" style="left:66%;top:36%;animation-delay:2.3s"></span>
+      <span class="sea-spark" style="left:79%;top:56%;animation-delay:1.2s"></span>
+      <span class="sea-spark" style="left:91%;top:26%;animation-delay:2.9s"></span>
+    </div>
   </div>
-</div>
-<canvas id="beacon-bg" aria-hidden="true"></canvas>
-<canvas id="beacon-light" aria-hidden="true"></canvas>
-<canvas id="beacon-fly" aria-hidden="true"></canvas>
-<div id="dock" role="toolbar" aria-label="Sound and view">
-  <button class="dock-btn" id="b-sound" type="button" aria-pressed="true" title="Mute sound (M)"><canvas aria-hidden="true"></canvas></button>
-  <button class="dock-btn" id="b-focus" type="button" aria-pressed="false" title="Hide the interface and just watch (H)"><canvas aria-hidden="true"></canvas></button>
-</div>
-<div class="wrap">
-  <header class="top">
-    <h1>Lighthouse 8-Puzzle</h1>
-    <p class="lede">The great lighthouse of Alexandria has crumbled into nine tiles. Pick a search algorithm and watch it slide the pieces back into place. When the tower stands whole, its lamp lights up the night. The empty slot rests in the top-left corner of the finished board.</p>
-  </header>
-
-  <main class="layout">
-    <section class="stage" aria-label="Board and playback">
-      <div class="board-frame"><canvas id="board" width="448" height="448" role="img" aria-label="8-puzzle board"></canvas></div>
-      <p id="caption" class="caption" aria-live="polite"></p>
-      <div class="transport" role="group" aria-label="Playback">
-        <button class="btn" id="b-start" type="button">Start</button>
-        <button class="btn" id="b-prev" type="button">Prev</button>
-        <button class="btn primary" id="b-play" type="button">Play</button>
-        <button class="btn" id="b-next" type="button">Next</button>
-        <button class="btn" id="b-end" type="button">End</button>
+  <canvas id="beacon-bg" aria-hidden="true"></canvas>
+  <canvas id="beacon-light" aria-hidden="true"></canvas>
+  <canvas id="beacon-fly" aria-hidden="true"></canvas>
+  <div id="dock" role="toolbar" aria-label="Sound and view">
+    <button class="dock-btn" id="b-sound" type="button" aria-pressed="true" title="Mute sound (M)"><canvas aria-hidden="true"></canvas></button>
+    <button class="dock-btn" id="b-focus" type="button" aria-pressed="false" title="Hide the interface and just watch (H)"><canvas aria-hidden="true"></canvas></button>
+  </div>
+  <script>document.body.classList.add('menu');</script>
+  <div id="menu" aria-label="Main menu">
+    <canvas id="menu-scene" aria-hidden="true"></canvas>
+    <div class="menu-ui">
+      <header class="menu-title">
+        <p class="eyebrow">&#10022; ALEXANDRIA &bull; 8-BIT SEARCH LAB &#10022;</p>
+        <h1>Lighthouse <br>8-Puzzle</h1>
+        <p class="lede">Bring the boats home. Slide the tiles yourself, or watch the search algorithms light the way.</p>
+      </header>
+      <div class="menu-cards" role="group" aria-label="Choose a mode">
+        <button class="mcard" type="button" id="c-play">
+          <span class="mcard-icon" aria-hidden="true"><canvas></canvas></span>
+          <span class="mcard-body">
+          <span class="mcard-kicker" id="c-play-k">You steer</span>
+          <span class="mcard-name">Play yourself</span>
+          <span class="mcard-desc">Slide the tiles yourself and try to beat the optimal par.</span>
+        </span>
+          <span class="mcard-go" aria-hidden="true">GO &gt;</span>
+        </button>
+        <button class="mcard" type="button" id="c-watch">
+          <span class="mcard-icon" aria-hidden="true"><canvas></canvas></span>
+          <span class="mcard-body">
+          <span class="mcard-kicker">The AI steers</span>
+          <span class="mcard-name">Watch the solver</span>
+          <span class="mcard-desc">Watch BFS, DFS, IDDFS and A* solve any board, step by step.</span>
+        </span>
+          <span class="mcard-go" aria-hidden="true">GO &gt;</span>
+        </button>
+        <button class="mcard" type="button" id="c-bench">
+          <span class="mcard-icon" aria-hidden="true"><canvas></canvas></span>
+          <span class="mcard-body">
+          <span class="mcard-kicker">The lab</span>
+          <span class="mcard-name">Benchmark lab</span>
+          <span class="mcard-desc">Compare the algorithms on seeded puzzles, with charts.</span>
+        </span>
+          <span class="mcard-go" aria-hidden="true">GO &gt;</span>
+        </button>
+        <button class="mcard" type="button" id="c-trophy">
+          <span class="mcard-icon" aria-hidden="true"><canvas></canvas></span>
+          <span class="mcard-body">
+          <span class="mcard-kicker">Your harbour</span>
+          <span class="mcard-name">Trophies &amp; fleet</span>
+          <span class="mcard-desc" id="c-trophy-d">Win games to earn boats. Experiment to find the secrets.</span>
+        </span>
+          <span class="mcard-go" aria-hidden="true">GO &gt;</span>
+        </button>
       </div>
-      <div class="field-row"><label for="scrub">Step</label><input type="range" id="scrub" min="0" max="0" value="0"><span></span></div>
-      <div class="field-row"><label for="speed">Speed</label><input type="range" id="speed" min="0" max="9" value="3"><output id="speed-out" for="speed"></output></div>
-      <label class="check"><input type="checkbox" id="nums" checked> Show tile numbers</label>
-    </section>
+      <p class="note menu-hint">Press 1 to 4, or use the arrow keys and Enter. M mutes the sound.</p>
+    </div>
+    <button id="lamp-hit" type="button" aria-label="The lighthouse lamp" title="The lamp looks ticklish"></button>
+  </div>
 
-    <div class="side">
-      <form id="setup" class="panel" autocomplete="off">
-        <h2>Start state</h2>
-        <div class="field">
-          <label for="initial">Tiles row by row, 0 is the blank</label>
-          <input id="initial" type="text" inputmode="numeric" spellcheck="false" value="1,2,5,3,4,0,6,7,8">
+  <div id="toast" role="status" aria-live="polite"><span class="ticon" aria-hidden="true"><canvas></canvas></span><div><div class="tk"></div><div class="tt"></div><div class="td"></div></div></div>
+
+  <div id="trophy" class="modal" role="dialog" aria-modal="true" aria-labelledby="trophy-h" hidden>
+    <div class="modal-card">
+      <div class="modal-head"><h2 id="trophy-h">Trophies &amp; fleet</h2><button class="btn small" type="button" id="t-close">Close</button></div>
+      <p class="msg" id="t-sum"></p>
+      <div class="trophy-grid" id="t-grid"></div>
+      <h3>Your harbour</h3>
+      <div class="fleet-line" id="t-fleet"></div>
+      <p class="note">Every win docks a boat. Finish a puzzle for a fishing boat, finish without hints for a sailboat, and match the optimal move count without hints for a golden galleon. Beating your own record earns a bonus boat one tier up. Some boats are not for sale.</p>
+      <div class="btn-row"><button class="btn small" type="button" id="t-reset">Reset trophies and fleet</button></div>
+    </div>
+  </div>
+
+  <div id="ghost" class="modal" role="dialog" aria-modal="true" aria-labelledby="ghost-h" hidden>
+    <div class="modal-card">
+      <div class="modal-head"><h2 id="ghost-h">Race the ghost</h2><button class="btn small" type="button" id="g-close">Close</button></div>
+      <p class="note">Your solution and the optimal one, step for step on the same starting board.</p>
+      <div class="ghost-boards">
+        <figure><canvas id="g-you" width="448" height="448" aria-label="Your moves"></canvas><figcaption id="g-you-c"></figcaption></figure>
+        <figure><canvas id="g-opt" width="448" height="448" aria-label="The optimal ghost"></canvas><figcaption id="g-opt-c"></figcaption></figure>
+      </div>
+      <p class="msg" id="g-msg" aria-live="polite"></p>
+      <div class="btn-row">
+        <button class="btn primary" type="button" id="g-replay">Replay</button>
+        <label class="speed-pick">Speed <select id="g-speed"><option value="900">Slow</option><option value="500" selected>Normal</option><option value="220">Fast</option><option value="100">Very fast</option></select></label>
+      </div>
+    </div>
+  </div>
+
+  <div id="bench" aria-label="Benchmark lab">
+    <div class="bench-ui">
+      <header class="menu-title">
+        <p class="eyebrow">&#10022; THE SEARCH LAB &#10022;</p>
+        <h1>Benchmark lab</h1>
+        <p class="lede">Run a seeded set of puzzles through the search algorithms and compare average runtime, solution length, nodes expanded and failures. The same seed always gives the same puzzles.</p>
+      </header>
+      <section class="panel" aria-label="Benchmark setup">
+        <h2>Setup</h2>
+        <div class="bench-grid">
+          <div class="field"><label for="bn-seed">Seed</label><input id="bn-seed" type="text" value="pharos" maxlength="40" spellcheck="false" autocomplete="off"></div>
+          <div class="field"><label for="bn-count">Puzzles</label><select id="bn-count"><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option><option value="50">50</option></select></div>
+          <div class="field"><label for="bn-mode">Difficulty</label><select id="bn-mode"><option value="8">Easy (8 scramble moves)</option><option value="16">Medium (16)</option><option value="24" selected>Hard (24)</option><option value="perm">Random boards</option></select></div>
+          <div class="field"><label for="bn-time">Time limit per run</label><select id="bn-time"><option value="2000">2 seconds</option><option value="5000" selected>5 seconds</option><option value="15000">15 seconds</option></select></div>
         </div>
-        <p id="state-msg" class="msg" aria-live="polite"></p>
-        <div class="field">
-          <label for="algo">Algorithm</label>
-          <select id="algo">
-            <option value="bfs">BFS</option>
-            <option value="dfs">DFS</option>
-            <option value="iddfs">Iterative DFS</option>
-            <option value="astar-m" selected>A* with Manhattan distance</option>
-            <option value="astar-e">A* with Euclidean distance</option>
-          </select>
-        </div>
+        <fieldset class="bn-algos" id="bn-algos"><legend>Algorithms</legend></fieldset>
         <div class="btn-row">
-          <button class="btn primary" type="submit" id="b-solve">Solve</button>
-          <button class="btn" type="button" id="b-shuffle">Shuffle</button>
-          <button class="btn" type="button" id="b-example">Example</button>
+          <button class="btn primary" type="button" id="bn-run">Run benchmark</button>
+          <button class="btn" type="button" id="bn-cancel" disabled>Cancel</button>
+          <button class="btn" type="button" id="bn-back">Main menu</button>
         </div>
-        <p id="status" class="msg" aria-live="polite"></p>
-      </form>
-
-      <section class="panel" aria-label="Result">
-        <h2>Result</h2>
-        <div class="table-wrap"><table id="stats"><tbody></tbody></table></div>
-        <p class="note">Expanded counts nodes whose successors were generated. The goal is tested when a node leaves the frontier, so the goal node itself is not counted. Running time covers the search only, not drawing.</p>
+        <div class="pbar" role="progressbar" aria-label="Benchmark progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="bn-bar"><i></i></div>
+        <p class="msg" id="bn-msg" aria-live="polite"></p>
       </section>
-
-      <section class="panel" aria-label="Trace">
-        <h2>Trace</h2>
-        <pre class="console" id="console"></pre>
-        <div class="trace-list" id="trace-list"></div>
-      </section>
-
-      <section class="panel" aria-label="Comparison">
-        <h2>Compare all five</h2>
-        <p class="note" id="cmp-note">Runs every algorithm on the start state above. Green marks the lowest value in a column.</p>
-        <div class="btn-row"><button class="btn" type="button" id="b-runall">Run all</button></div>
+      <section class="panel" id="bn-out" aria-label="Benchmark results" hidden>
+        <h2>Results <span class="muted" id="bn-sub"></span></h2>
         <div class="table-wrap">
-          <table id="cmp">
-            <thead><tr><th>Algorithm</th><th class="num">Cost</th><th class="num">Expanded</th><th class="num">Generated</th><th class="num">Deepest</th><th class="num">Time</th><th></th></tr></thead>
+          <table id="bn-sum">
+            <thead><tr><th>Algorithm</th><th class="num">Solved</th><th class="num">Failed</th><th class="num">Avg length</th><th class="num">Avg extra</th><th class="num">Avg nodes</th><th class="num">Avg time</th><th class="num">Max time</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
+        <p class="note">Nodes means nodes expanded. Averages cover solved puzzles only. A failure is a run that hit the time limit. Avg extra is the extra moves: the solution length minus the optimal length, which A* with Manhattan distance finds for every puzzle. Green marks the best value in a column.</p>
+        <div class="charts" id="bn-charts"></div>
+        <details><summary>Per-puzzle results</summary><div class="table-wrap"><table id="bn-per"><thead></thead><tbody></tbody></table></div></details>
+        <div class="btn-row"><button class="btn" type="button" id="bn-csv">Download CSV</button></div>
+      </section>
+    </div>
+  </div>
+  <div class="wrap">
+    <header class="top">
+      <h1>Lighthouse 8-Puzzle</h1>
+      <p class="lede">The great lighthouse of Alexandria has crumbled into nine tiles. Pick a search algorithm and watch it slide the pieces back into place. When the tower stands whole, its lamp lights up the night. The empty slot rests in the top-left corner of the finished board.</p>
+    </header>
+
+    <main class="layout">
+      <section class="stage" aria-label="Board and playback">
+        <div class="board-frame"><canvas id="board" width="448" height="448" role="img" aria-label="8-puzzle board"></canvas></div>
+        <p id="caption" class="caption" aria-live="polite"></p>
+        <div class="transport" role="group" aria-label="Playback">
+          <button class="btn" id="b-start" type="button">Start</button>
+          <button class="btn" id="b-prev" type="button">Prev</button>
+          <button class="btn primary" id="b-play" type="button">Play</button>
+          <button class="btn" id="b-next" type="button">Next</button>
+          <button class="btn" id="b-end" type="button">End</button>
+        </div>
+        <div class="field-row"><label for="scrub">Step</label><input type="range" id="scrub" min="0" max="0" value="0"><span></span></div>
+        <div class="field-row"><label for="speed">Speed</label><input type="range" id="speed" min="0" max="9" value="3"><output id="speed-out" for="speed"></output></div>
+        <label class="check"><input type="checkbox" id="nums" checked> Show tile numbers</label>
       </section>
 
-      <details class="panel">
-        <summary>Trace JSON</summary>
-        <div class="inner">
-          <p class="note">Paste a start state and a list of moves to replay any solution. Every board is rebuilt from them. <code>moves</code> is a string of U, D, L, R: the direction the blank moves.</p>
-          <pre class="sample">{"algorithm":"A* Manhattan","initial":"125340678","moves":"UL","expanded":3,"generated":7,"maxDepth":3,"ms":0.4}</pre>
-          <textarea id="json" rows="6" spellcheck="false" aria-label="Trace JSON"></textarea>
-          <div class="btn-row">
-            <button class="btn small" type="button" id="j-fill">Reset to current</button>
-            <button class="btn small" type="button" id="j-copy">Copy</button>
-            <button class="btn small" type="button" id="j-load">Load</button>
+      <div class="side">
+        <section class="panel" id="mode-panel" aria-label="Mode">
+          <h2>Mode</h2>
+          <div class="btn-row mode-row">
+            <button class="btn primary" type="button" id="m-watch" aria-pressed="true">Watch solver</button>
+            <button class="btn" type="button" id="m-play" aria-pressed="false">Play yourself</button>
+            <button class="btn" type="button" id="m-menu">Main menu</button>
           </div>
-          <p id="j-msg" class="msg" aria-live="polite"></p>
-        </div>
-      </details>
-    </div>
-  </main>
-</div>
+        </section>
 
-<script src="script.js"></script>
+        <section class="panel" id="play-panel" aria-label="Play" hidden>
+          <h2>Your game</h2>
+          <div class="field">
+            <label for="diff">Difficulty</label>
+            <select id="diff">
+              <option value="6">Easy (6 scramble moves)</option>
+              <option value="16" selected>Medium (16 scramble moves)</option>
+              <option value="30">Hard (30 scramble moves)</option>
+              <option value="rand">Anything solvable</option>
+              <option value="custom">Custom board&hellip;</option>
+            </select>
+          </div>
+          <p class="msg" id="p-line" aria-live="off"></p>
+          <p class="msg" id="p-msg" aria-live="polite"></p>
+          <div id="edit-box" class="inner" hidden>
+            <div class="field">
+              <label for="e-text">Tiles row by row, 0 is the blank</label>
+              <input id="e-text" type="text" inputmode="numeric" spellcheck="false" autocomplete="off">
+            </div>
+            <p class="msg" id="e-msg" aria-live="polite"></p>
+            <div class="btn-row">
+              <button class="btn primary" type="button" id="e-play">Play this board</button>
+              <button class="btn" type="button" id="e-random">Random</button>
+              <button class="btn" type="button" id="e-fix">Make solvable</button>
+              <button class="btn" type="button" id="e-reset">Clear</button>
+              <button class="btn" type="button" id="e-cancel">Cancel</button>
+            </div>
+            <p class="note">Click two tiles on the board to swap them, or type a board above. Only boards with an even inversion count can be solved.</p>
+          </div>
+          <div class="btn-row" id="game-btns">
+            <button class="btn primary" type="button" id="p-new">New game</button>
+            <button class="btn" type="button" id="p-undo">Undo</button>
+            <button class="btn" type="button" id="p-restart">Restart</button>
+            <button class="btn" type="button" id="p-hint">Hint</button>
+            <button class="btn" type="button" id="p-ghost" disabled>Race ghost</button>
+          </div>
+          <p class="note" id="play-note">Click a tile next to the blank, or use the arrow keys (the tile slides the way you press). Z undoes. The Step slider and Prev/Next rewind your game; make a move from an earlier step to branch. Par is the optimal move count, found by A*.</p>
+          <h3>Hall of fame <span id="hof-name"></span></h3>
+          <div class="table-wrap">
+            <table id="hof">
+              <thead><tr><th>#</th><th class="num">Moves</th><th class="num">Time</th><th class="num">Hints</th><th>Date</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="btn-row"><button class="btn small" type="button" id="hof-clear">Clear all scores</button></div>
+          <p class="note">Ranked by moves over par, then hints, then time. Scores are stored in this browser only.</p>
+        </section>
 
-</body></html>
+        <form id="setup" class="panel solver-only" autocomplete="off">
+          <h2>Start state</h2>
+          <div class="field">
+            <label for="initial">Tiles row by row, 0 is the blank</label>
+            <input id="initial" type="text" inputmode="numeric" spellcheck="false" value="1,2,5,3,4,0,6,7,8">
+          </div>
+          <p id="state-msg" class="msg" aria-live="polite"></p>
+          <div class="field">
+            <label for="algo">Algorithm</label>
+            <select id="algo">
+              <option value="bfs">BFS</option>
+              <option value="dfs">DFS</option>
+              <option value="iddfs">Iterative DFS</option>
+              <option value="astar-m" selected>A* with Manhattan distance</option>
+              <option value="astar-e">A* with Euclidean distance</option>
+            </select>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" type="submit" id="b-solve">Solve</button>
+            <button class="btn" type="button" id="b-shuffle">Shuffle</button>
+            <button class="btn" type="button" id="b-example">Example</button>
+          </div>
+          <p id="status" class="msg" aria-live="polite"></p>
+        </form>
+
+        <section class="panel solver-only" aria-label="Result">
+          <h2>Result</h2>
+          <div class="table-wrap"><table id="stats"><tbody></tbody></table></div>
+          <p class="note">Expanded counts nodes whose successors were generated. The goal is tested when a node leaves the frontier, so the goal node itself is not counted. Running time covers the search only, not drawing.</p>
+        </section>
+
+        <section class="panel solver-only" aria-label="Trace">
+          <h2>Trace</h2>
+          <pre class="console" id="console"></pre>
+          <div class="trace-list" id="trace-list"></div>
+        </section>
+
+        <section class="panel solver-only" aria-label="Comparison">
+          <h2>Compare all five</h2>
+          <p class="note" id="cmp-note">Runs every algorithm on the start state above. Green marks the lowest value in a column.</p>
+          <div class="btn-row"><button class="btn" type="button" id="b-runall">Run all</button></div>
+          <div class="table-wrap">
+            <table id="cmp">
+              <thead><tr><th>Algorithm</th><th class="num">Cost</th><th class="num">Expanded</th><th class="num">Generated</th><th class="num">Deepest</th><th class="num">Time</th><th></th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <details class="panel solver-only">
+          <summary>Trace JSON</summary>
+          <div class="inner">
+            <p class="note">Paste a start state and a list of moves to replay any solution. Every board is rebuilt from them. <code>moves</code> is a string of U, D, L, R: the direction the blank moves.</p>
+            <pre class="sample">{"algorithm":"A* Manhattan","initial":"125340678","moves":"UL","expanded":3,"generated":7,"maxDepth":3,"ms":0.4}</pre>
+            <textarea id="json" rows="6" spellcheck="false" aria-label="Trace JSON"></textarea>
+            <div class="btn-row">
+              <button class="btn small" type="button" id="j-fill">Reset to current</button>
+              <button class="btn small" type="button" id="j-copy">Copy</button>
+              <button class="btn small" type="button" id="j-load">Load</button>
+            </div>
+            <p id="j-msg" class="msg" aria-live="polite"></p>
+          </div>
+        </details>
+      </div>
+    </main>
+  </div>
+
+  <script src="puzzle.js"></script>
+  <script src="api.js"></script>
+  <script src="script.js"></script>
+
+  </body></html>
