@@ -33,7 +33,7 @@ public class Solver {
                 return success("IDDFS", p.goal(), totalExp, totalGen, maxDepth, System.nanoTime() - t0);
             }
             if (!p.cutoff()) {
-                return new SearchResult("IDDFS", null, 0, maxDepth, totalExp, totalGen,
+                return new SearchResult("IDDFS", null, 0,maxDepth, totalExp, totalGen,
                         System.nanoTime() - t0);
             }
         }
