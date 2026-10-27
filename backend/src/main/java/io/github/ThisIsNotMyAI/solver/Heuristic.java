@@ -1,4 +1,4 @@
-package io.github.ThisIsNotMyAI;
+package io.github.ThisIsNotMyAI.solver;
 
 import static java.lang.Math.*;
 

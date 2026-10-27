@@ -1,4 +1,4 @@
-package io.github.ThisIsNotMyAI;
+package io.github.ThisIsNotMyAI.solver;
 
 public enum Action {
     UP(-1,0,'U') ,

@@ -1,10 +1,7 @@
-package io.github.ThisIsNotMyAI;
+package io.github.ThisIsNotMyAI.solver;
 
 import io.github.ThisIsNotMyAI.server.json.Algorithm;
 import io.github.ThisIsNotMyAI.server.json.SolveResult;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public record SearchResult(
         String algorithm,

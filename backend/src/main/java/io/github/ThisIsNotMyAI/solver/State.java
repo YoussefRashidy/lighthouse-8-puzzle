@@ -1,4 +1,4 @@
-package io.github.ThisIsNotMyAI;
+package io.github.ThisIsNotMyAI.solver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
