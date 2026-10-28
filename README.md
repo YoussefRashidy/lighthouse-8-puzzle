@@ -257,13 +257,13 @@ For BFS the goal test at removal costs one extra level of generation compared wi
 
 ### Heuristics
 
-Let $(r_i, c_i)$ be the current row and column of tile $i$, and $(r_i^*, c_i^*) = (\lfloor i/3 \rfloor,\ i \bmod 3)$ its goal position. The blank is not counted.
+Let $(r_i, c_i)$ be the current row and column of tile $i$, and $(\hat r_i, \hat c_i) = (\lfloor i/3 \rfloor,\ i \bmod 3)$ its goal position. The blank is not counted.
 
-$$h_{\text{Manhattan}}(s)=\sum_{i=1}^{8}\bigl(|r_i-r_i^*|+|c_i-c_i^*|\bigr) \qquad h_{\text{Euclidean}}(s)=\sum_{i=1}^{8}\sqrt{(r_i-r_i^*)^2+(c_i-c_i^*)^2}$$
+$$h_{\text{Manhattan}}(s)=\sum_{i=1}^{8}\bigl(|r_i-\hat r_i|+|c_i-\hat c_i|\bigr) \qquad h_{\text{Euclidean}}(s)=\sum_{i=1}^{8}\sqrt{(r_i-\hat r_i)^2+(c_i-\hat c_i)^2}$$
 
-**Admissibility.** A move slides exactly one tile by exactly one cell, so every move can reduce $h_{\text{Manhattan}}$ by at most 1. Reaching the goal (where $h=0$) from $s$ therefore needs at least $h_{\text{Manhattan}}(s)$ moves, so $h_{\text{Manhattan}}(s) \le h^*(s)$. The same move changes each tile's Euclidean distance by at most 1 as well, and for every tile $\sqrt{\Delta r^2+\Delta c^2} \le |\Delta r|+|\Delta c|$, hence
+**Admissibility.** A move slides exactly one tile by exactly one cell, so every move can reduce $h_{\text{Manhattan}}$ by at most 1. Reaching the goal (where $h=0$) from $s$ therefore needs at least $h_{\text{Manhattan}}(s)$ moves, so $h_{\text{Manhattan}}(s) \le h^{\ast}(s)$. The same move changes each tile's Euclidean distance by at most 1 as well, and for every tile $\sqrt{\Delta r^2+\Delta c^2} \le |\Delta r|+|\Delta c|$, hence
 
-$$h_{\text{Euclidean}}(s)\ \le\ h_{\text{Manhattan}}(s)\ \le\ h^*(s).$$
+$$h_{\text{Euclidean}}(s)\ \le\ h_{\text{Manhattan}}(s)\ \le\ h^{\ast}(s).$$
 
 **Consistency.** For a move from $s$ to $s'$ with step cost 1, $|h(s)-h(s')| \le 1$ for both heuristics (one tile moves by one cell), so $h(s)\le 1+h(s')$. With a consistent heuristic, the first time A\* removes a state from the frontier it has reached it by a cheapest path, so the explored set never has to be reopened and the solution is optimal.
 
