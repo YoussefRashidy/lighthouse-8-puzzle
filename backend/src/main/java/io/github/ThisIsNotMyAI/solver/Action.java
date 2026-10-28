@@ -8,7 +8,7 @@ public enum Action {
 
     final int rowDirection ;
     final int colDirection ;
-    final char encoding ;
+    public final char encoding ;
 
     Action(int rowDirection, int colDirection , char encoding) {
         this.rowDirection = rowDirection;

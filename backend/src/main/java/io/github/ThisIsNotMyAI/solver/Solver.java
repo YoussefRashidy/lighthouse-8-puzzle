@@ -140,6 +140,7 @@ public class Solver {
         }
 
         sb.append(String.format("Nodes expanded:   %,d%n", r.nodesExpanded()));
+        sb.append(String.format("Nodes generated:   %,d%n",r.nodesGenerated()));
         sb.append(String.format("Running time:     %.3f ms%n", r.elapsedNanos() / 1e6));
         return sb.toString();
     }
