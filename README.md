@@ -442,17 +442,6 @@ Goal reached!
 
 `backend/src/main/java/io/github/ThisIsNotMyAI/server/server-test.http` is a request collection for the IntelliJ HTTP Client (it also works as a reference for `curl`). It covers the happy path, all five algorithms, the CORS pre-flight, a wrong method, an unknown algorithm, malformed JSON, an unknown field, an unsolvable board and an invalid board.
 
-## Known issues
-
-Honest notes for anyone picking this up:
-
-- **Timing resolution.** `Server.mapSearch` converts nanoseconds with integer division (`elapsedNanos()/1000000`), so the API's `ms` is a whole number of milliseconds and sub-millisecond A\* runs report `0.0`. This is why the benchmark averages for A\* look like `0.65 ms`: they are averages of whole-millisecond values. Dividing by `1_000_000.0` fixes it.
-- **Peak frontier.** The UI has a "Peak frontier" row, but the server does not send `peakFrontier` yet, so it shows a dash.
-- **Single-threaded server.** `HttpServer` runs with its default executor, so requests are handled one at a time. The benchmark's time limit only stops the page waiting, it does not cancel the search on the server, so a timed-out DFS or IDDFS run keeps the server busy until it finishes.
-- **DFS paths are long by nature.** DFS is not optimal. On hard boards its solutions can be tens of thousands of moves long (see the sample benchmark).
-- **Test file drift.** In `server-test.http`, cases 8 and 9 still use the old field name `initial` (they currently fail on the unknown field rather than on board validation), and some comments still say the server echoes the request.
-- **Housekeeping.** `SearchResult` contains an unused private `toSolveResult` helper, there are no automated unit tests yet, and the solver URL is a constant in `Api.js`.
-
 ## Authors
 
 Built by [Youssef Ali](https://github.com/YoussefRashidy) and [@nourr-ahmed](https://github.com/nourr-ahmed) as an Artificial Intelligence course project on uninformed and informed search.
