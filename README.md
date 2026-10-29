@@ -444,4 +444,4 @@ Goal reached!
 
 ## Authors
 
-Built by [Youssef Ali](https://github.com/YoussefRashidy) and [@nourr-ahmed](https://github.com/nourr-ahmed) as an Artificial Intelligence course project on uninformed and informed search.
+Built by [Youssef Ali](https://github.com/YoussefRashidy) and [Nour Ahmed](https://github.com/nourr-ahmed) as an Artificial Intelligence course project on uninformed and informed search.
